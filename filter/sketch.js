@@ -1,6 +1,8 @@
 var img;
 let gFile;
 
+//code from Max Wallace https://stackoverflow.com/questions/22087076/how-to-make-a-simple-image-upload-using-javascript-html
+
 function previewFile(){
     var preview = document.querySelector('img'); //selects the query named img
     var file    = document.querySelector('input[type=file]').files[0]; //sames as here
