@@ -10,7 +10,7 @@ function preload() {
   //inside of that.
   imageArray = ["sk8.jpg","legobrick.jpg","dad.jpg","legocas.jpg","danny.jpg","miniGolf.jpg","File_001.jpeg","jfiltered.jpg"]
   //img = loadImage(imageArray[Math.round(random(0,imageArray.length-1))])
-  img = loadImage(legocas.jpg)
+  img = loadImage("legocas.jpg")
   //img = document.querySelector('input[type=file]').files[0]
 
 }
