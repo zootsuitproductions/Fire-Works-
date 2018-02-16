@@ -1,5 +1,6 @@
 //image of castle from Gico Visione on Instagram: https://www.instagram.com/giocovisione/
 //slider code from p5 library: https://p5js.org/reference/#/p5/createSlider
+//save code from p5 library: https://p5js.org/reference/#/p5.Image/save
 
 var img;
 var redSlider;
@@ -163,4 +164,10 @@ function draw() {
   lastBlueVal = blueVal;
   lastReachVal = reachVal;
   lastThreshVal = threshVal;
+}
+
+function keyTyped() {
+  if (key === 's') {
+    photo.save('photo', 'png');
+  }
 }
