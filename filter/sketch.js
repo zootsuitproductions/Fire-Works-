@@ -32,9 +32,9 @@ function updateBackground(r,g,b) {
   text("averaging reach",3.2*img.width/8+2, img.height+120+2)
   
   fill(0,0,0)
-  text("press 's' to save the image",30, 30)
+  text("press the s key to save the image",30, 30)
   fill(255,255,255)
-  text("press 's' to save the image",32, 32)
+  text("press the s key to save the image",32, 32)
 
   fill(255,0,0)
   text("red",1.2*img.width/8, img.height+30)
