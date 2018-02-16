@@ -7,6 +7,7 @@ function preload() {
   imageArray = ["sk8.jpg","legocas.jpg","miniGolf.jpg"]
   //all images owned by Daniel Santana, or are public domain
   img = loadImage(imageArray[Math.round(random(0,imageArray.length-1))])
+  //selects a random image from the array
 }
 
 class SliderClass {
@@ -81,10 +82,13 @@ var lastPixels;
 function updateMyImage(r,g,b,th,rea,br,bg,bb) {
   loadPixels();
   lastPixels = pixels
+  //runs through sets of values for r,g,b, and alpha
   for(var i=4*img.width*img.height*0;i<4*img.width*img.height;i+=4) {
     let color = [r,g,b]
     let threshhold = th
     let theReach = rea
+    //defines these variables as the inputs of the function
+    //the following if statements check if the pixels adjacent to a given pixel are contrasting enough by a certain threshold (in other words, it detects a change in shade, or a detail, and draws a line there)
     if (pixels[i]+threshhold < pixels[i+4] && pixels[i+1]+threshhold < pixels[i+5] && pixels[i+2]+threshhold < pixels[i+6]) {
       pixels[i] = color[0]; //red
       pixels[i+1] = color[1]; //green
@@ -107,6 +111,7 @@ function updateMyImage(r,g,b,th,rea,br,bg,bb) {
   updatePixels();
 }
 
+//the following method averages the color values of pixels below a given pixel in order to change where and when lines are drawn in the filter
 function getAveragePixelValuebelow(pixelIndex,reachBelow) {
   let toBeDivided = 0
   for (var r = 1; r <= reachBelow; r ++) {
