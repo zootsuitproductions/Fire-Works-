@@ -4,15 +4,9 @@ var imageArray;
 
 //preload will load before setup runs
 function preload() {
-  //this relative file path starts in the same folder as your sketch.
-  //In other words, in this example, make a folder called images in the same
-  //folder as your sketch file (sketch.js) and then put the image file ("jomy.jpg")
-  //inside of that.
-  imageArray = ["sk8.jpg","legobrick.jpg","dad.jpg","legocas.jpg","danny.jpg","miniGolf.jpg","File_001.jpeg","jfiltered.jpg"]
-  //img = loadImage(imageArray[Math.round(random(0,imageArray.length-1))])
-  img = loadImage("legocas.jpg")
-  //img = document.querySelector('input[type=file]').files[0]
-
+  imageArray = ["sk8.jpg","legocas.jpg","miniGolf.jpg"]
+  //all images owned by Daniel Santana, or are public domain
+  img = loadImage(imageArray[Math.round(random(0,imageArray.length-1))])
 }
 
 class SliderClass {
@@ -22,34 +16,6 @@ class SliderClass {
     this.slider.style('width', '200px');
   }
 }
-
-//uploading code from Max Wallace https://stackoverflow.com/questions/22087076/how-to-make-a-simple-image-upload-using-javascript-html
-/*function previewFile(){
-    var preview = document.querySelector('img'); //selects the query named img
-    var file = document.querySelector('input[type=file]').files[0]; //sames as here
-    var reader  = new FileReader();
-
-    reader.onloadend = function () {
-        preview.src = reader.result;
-    }
-
-    if (file) {
-        reader.readAsDataURL(file); //reads the data as a URL
-        img = loadImage(file)
-    } else {
-        preview.src = "";
-    }
-    gFile = file
-}
-
-html:
-
-<input type="file" onchange="previewFile()"><br>
-<img src="" height="200" alt="Image preview...">
-
-*/
-
-//
 
 function updateBackground(r,g,b) {
   background(r,g,b)
@@ -83,43 +49,31 @@ function updateBackground(r,g,b) {
   text("background green",6.2*img.width/8, img.height+90)
   fill(0,0,255)
   text("background blue",6.2*img.width/8, img.height+150)
+  //makes all of the lables that will acompany the sliders, and the text is multi-layered (with a black shadow) so it does not become invisible at boundry values.
 }
 
 function setup() {
   if (img.width > img.height) {
     img.resize(1500, (img.height/img.width)*1500);
   } else {
-    //img.resize(1500, (img.height/img.width)*1500);
     img.resize((img.width/img.height)*1000, 1000);
   }
-
+  //resizes images so that they fit on the canvas
   createCanvas(img.width, img.height+170);
   background(255,0,0);
   image(img, 0, 0); //draw the image to the canvas
   console.log("Image width: " + img.width + " height: " + img.height);
 
-
   redSlider = new SliderClass(0*img.width/8, img.height,255,random(255));
   blueSlider = new SliderClass(0*img.width/8, img.height+120,255,random(255));
   greenSlider = new SliderClass(0*img.width/8, img.height+60,255,random(255));
-  threshSlider = new SliderClass(2*img.width/8, img.height+30,50,random(50));
-  reachSlider = new SliderClass(2*img.width/8, img.height+90,25,random(25));
-
-
+  threshSlider = new SliderClass(2*img.width/8, img.height+30,50,5);
+  reachSlider = new SliderClass(2*img.width/8, img.height+90,25,3);
+  //BACKGROUND
   redSliderB = new SliderClass(5*img.width/8, img.height,255,random(255));
   blueSliderB = new SliderClass(5*img.width/8, img.height+120,255,random(255));
   greenSliderB = new SliderClass(5*img.width/8, img.height+60,255,random(255));
-
-
-  /*slider = createSlider(0, 255, 100);
-  slider.position(img.width/8, img.height+25);
-  slider.style('width', '200px');*/
-  //one of the built-in filters to try out for inspiration! More at: https://p5js.org/reference/#/p5/filter
-  //uncomment to test
-  //filter(POSTERIZE, 5);
-
-  //change tint of pixels in a stripe by modifying the red channel
-  //updateMyImage(0,255,255,50,2);
+  //creates different objects for the different sliders out of a class, and sets the default of the colors to random values
 }
 
 var lastPixels;
@@ -199,16 +153,3 @@ function draw() {
   lastReachVal = reachVal;
   lastThreshVal = threshVal;
 }
-
-/*
-
-
-
-else if (pixels[i]-threshhold > pixels[i-img.width*4] && pixels[i+1]-threshhold > pixels[i+1-img.width*4] && pixels[i+2]-threshhold > pixels[i+2-img.width*4]) {
-  ///checks if pixel below is contrasting
-  //right now this is dragging out white strands because there are pixels above that have been made white
-  pixels[i] = 255; //red
-  pixels[i+1] = 255; //green
-  pixels[i+2] = 255; //blue
-}
-*/
