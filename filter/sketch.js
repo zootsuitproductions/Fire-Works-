@@ -71,8 +71,8 @@ function updateBackground(r,g,b) {
 
 function setup() {
   if (img.width > img.height) {
-    img.resize(1500, (img.height/img.width)*1500);
-    originalImage.resize(1500, (img.height/img.width)*1500);
+    img.resize((img.width/img.height)*(windowHeight-220), (windowHeight-220));
+    originalImage.resize((img.width/img.height)*(windowHeight-220), (windowHeight-220));
   } else {
     img.resize((img.width/img.height)*1000, 1000);
     originalImage.resize(1500, (img.height/img.width)*1500);
