@@ -168,6 +168,6 @@ function draw() {
 
 function keyTyped() {
   if (key === 's') {
-    photo.save('photo', 'png');
+    img.save('filteredImage', 'jpg');
   }
 }
