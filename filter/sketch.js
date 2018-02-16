@@ -1,3 +1,6 @@
+//image of castle from Gico Visione on Instagram: https://www.instagram.com/giocovisione/
+//slider code from p5 library: https://p5js.org/reference/#/p5/createSlider
+
 var img;
 var redSlider;
 var imageArray;
@@ -131,7 +134,6 @@ var lastGreenValB;
 var lastBlueValB;
 
 function draw() {
-  //img = loadImage("sk8.jpg");
   var redVal = redSlider.slider.value();
   var greenVal = greenSlider.slider.value();
   var blueVal = blueSlider.slider.value();
@@ -145,11 +147,10 @@ function draw() {
   if (lastRedVal != redVal || lastGreenVal != greenVal || lastBlueVal != blueVal || lastThreshVal != threshVal || lastReachVal != reachVal || lastRedValB != redValB || lastGreenValB != greenValB || lastBlueValB != blueValB) {
     updateBackground(redVal,greenVal,blueVal);
     image(img, 0, 0)
+    //reloads the original image
     loadPixels();
     pixels = lastPixels;
     updatePixels();
-
-    //not working
     updateMyImage(redVal,greenVal,blueVal,threshVal,reachVal,redValB,greenValB,blueValB);
   }
   lastRedVal = redVal;
