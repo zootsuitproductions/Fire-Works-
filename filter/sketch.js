@@ -151,6 +151,7 @@ function draw() {
   var blueValB = blueSliderB.slider.value();
 
   if (lastRedVal != redVal || lastGreenVal != greenVal || lastBlueVal != blueVal || lastThreshVal != threshVal || lastReachVal != reachVal || lastRedValB != redValB || lastGreenValB != greenValB || lastBlueValB != blueValB) {
+    print("updating")
     updateBackground(redVal,greenVal,blueVal);
     image(img, 0, 0)
     //reloads the original image
@@ -168,7 +169,7 @@ function draw() {
 
 function keyTyped() {
   if (key === 's') {
-    print(saving);
+    print("saving");
     img.save('filteredImage', 'jpg');
   }
 }
