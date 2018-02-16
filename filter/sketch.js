@@ -5,12 +5,17 @@
 var img;
 var redSlider;
 var imageArray;
+var originalImage;
+var imageName;
 
 //preload will load before setup runs
 function preload() {
   imageArray = ["sk8.jpg","legocas.jpg","miniGolf.jpg"]
   //all images owned by Daniel Santana, or are public domain
-  img = loadImage(imageArray[Math.round(random(0,imageArray.length-1))])
+  let randomNumber = Math.round(random(0,imageArray.length-1))
+  img = loadImage(imageArray[randomNumber])
+  originalImage = loadImage(imageArray[randomNumber])
+  imageName = imageArray[randomNumber]
   //selects a random image from the array
 }
 
@@ -24,6 +29,13 @@ class SliderClass {
 
 function updateBackground(r,g,b) {
   background(r,g,b)
+
+  textSize(25)
+  fill(0,0,0)
+  text("press the s key to save the image",img.width/3+2, img.height+200+2)
+  fill(200,200,200)
+  text("press the s key to save the image",img.width/3, img.height+200)
+
   textSize(30)
   fill(0)
   text("blue",1.2*img.width/8+2, img.height+150+2)
@@ -31,11 +43,6 @@ function updateBackground(r,g,b) {
   text("red",1.2*img.width/8+2, img.height+30+2)
   text("sensitivity",3.2*img.width/8+2, img.height+60+2)
   text("averaging reach",3.2*img.width/8+2, img.height+120+2)
-  
-  fill(0,0,0)
-  text("press the s key to save the image",1.2*img.width/8+2, img.height+150+2)
-  fill(255,255,255)
-  text("press the s key to save the image",1.2*img.width/8, img.height+150)
 
   fill(255,0,0)
   text("red",1.2*img.width/8, img.height+30)
@@ -65,11 +72,13 @@ function updateBackground(r,g,b) {
 function setup() {
   if (img.width > img.height) {
     img.resize(1500, (img.height/img.width)*1500);
+    originalImage.resize(1500, (img.height/img.width)*1500);
   } else {
     img.resize((img.width/img.height)*1000, 1000);
+    originalImage.resize(1500, (img.height/img.width)*1500);
   }
   //resizes images so that they fit on the canvas
-  createCanvas(img.width, img.height+170);
+  createCanvas(img.width, img.height+220);
   background(255,0,0);
   image(img, 0, 0); //draw the image to the canvas
   console.log("Image width: " + img.width + " height: " + img.height);
@@ -86,45 +95,64 @@ function setup() {
   //creates different objects for the different sliders out of a class, and sets the default of the colors to random values
 }
 
-var lastPixels;
+//var lastPixels;
+
+function alternateFilter(theThresh) {
+  originalImage.loadPixels();
+  img.loadPixels();
+
+  for(var i=4*img.width*img.height*0;i<4*img.width*img.height;i+=4) {
+    if (originalImage.pixels[i] < theThresh && originalImage.pixels[i+1] < theThresh && originalImage.pixels[i+2] < theThresh){
+      img.pixels[i] = 0; //red
+      img.pixels[i+1] = 0; //green
+      img.pixels[i+2] = 0;
+    } else {
+      img.pixels[i] = 255; //red
+      img.pixels[i+1] = 255; //green
+      img.pixels[i+2] = 255;
+    }
+  }
+  img.updatePixels()
+}
 
 function updateMyImage(r,g,b,th,rea,br,bg,bb) {
-  loadPixels();
-  lastPixels = pixels
+  originalImage.loadPixels();
+  img.loadPixels();
+  //lastPixels = originalImage.pixels
   //runs through sets of values for r,g,b, and alpha
   for(var i=4*img.width*img.height*0;i<4*img.width*img.height;i+=4) {
     let color = [r,g,b]
     let threshhold = th
     let theReach = rea
     //defines these variables as the inputs of the function
-    //the following if statements check if the pixels adjacent to a given pixel are contrasting enough by a certain threshold (in other words, it detects a change in shade, or a detail, and draws a line there)
-    if (pixels[i]+threshhold < pixels[i+4] && pixels[i+1]+threshhold < pixels[i+5] && pixels[i+2]+threshhold < pixels[i+6]) {
-      pixels[i] = color[0]; //red
-      pixels[i+1] = color[1]; //green
-      pixels[i+2] = color[2]; //blue
-    } else if (pixels[i] > pixels[i+4]+threshhold && pixels[i+1] > pixels[i+5]+threshhold && pixels[i+2] > pixels[i+6]+threshhold) {
-      pixels[i] = color[0]; //red
-      pixels[i+1] = color[1]; //green
-      pixels[i+2] = color[2]; //blue
-    } else if (pixels[i]+threshhold < getAveragePixelValuebelow(i,theReach) && pixels[i+1]+threshhold < getAveragePixelValuebelow(i+1,theReach) && pixels[i+2]+threshhold < getAveragePixelValuebelow(i+2,theReach)) {
-      pixels[i] = color[0]; //red
-      pixels[i+1] = color[1]; //green
-      pixels[i+2] = color[2]; //blue
+    //the following if statements check if the originalImage.pixels adjacent to a given pixel are contrasting enough by a certain threshold (in other words, it detects a change in shade, or a detail, and draws a line there)
+    if (originalImage.pixels[i]+threshhold < originalImage.pixels[i+4] && originalImage.pixels[i+1]+threshhold < originalImage.pixels[i+5] && originalImage.pixels[i+2]+threshhold < originalImage.pixels[i+6]) {
+      img.pixels[i] = color[0]; //red
+      img.pixels[i+1] = color[1]; //green
+      img.pixels[i+2] = color[2]; //blue
+    } else if (originalImage.pixels[i] > originalImage.pixels[i+4]+threshhold && originalImage.pixels[i+1] > originalImage.pixels[i+5]+threshhold && originalImage.pixels[i+2] > originalImage.pixels[i+6]+threshhold) {
+      img.pixels[i] = color[0]; //red
+      img.pixels[i+1] = color[1]; //green
+      img.pixels[i+2] = color[2]; //blue
+    } else if (originalImage.pixels[i]+threshhold < getAveragePixelValuebelow(i,theReach) && originalImage.pixels[i+1]+threshhold < getAveragePixelValuebelow(i+1,theReach) && originalImage.pixels[i+2]+threshhold < getAveragePixelValuebelow(i+2,theReach)) {
+      img.pixels[i] = color[0]; //red
+      img.pixels[i+1] = color[1]; //green
+      img.pixels[i+2] = color[2]; //blue
     } else {
-      pixels[i] = br; //red
-      pixels[i+1] = bg; //green
-      pixels[i+2] = bb; //blue
+      img.pixels[i] = br; //red
+      img.pixels[i+1] = bg; //green
+      img.pixels[i+2] = bb; //blue
     }
-    pixels[i+3] -= 0; //alpha
+    img.pixels[i+3] -= 0; //alpha
   }
-  updatePixels();
+  img.updatePixels();
 }
 
-//the following method averages the color values of pixels below a given pixel in order to change where and when lines are drawn in the filter
+//the following method averages the color values of originalImage.pixels below a given pixel in order to change where and when lines are drawn in the filter
 function getAveragePixelValuebelow(pixelIndex,reachBelow) {
   let toBeDivided = 0
   for (var r = 1; r <= reachBelow; r ++) {
-    toBeDivided+=pixels[pixelIndex+img.width*4*r]
+    toBeDivided+=originalImage.pixels[pixelIndex+img.width*4*r]
   }
   return toBeDivided/reachBelow
 }
@@ -151,25 +179,24 @@ function draw() {
   var blueValB = blueSliderB.slider.value();
 
   if (lastRedVal != redVal || lastGreenVal != greenVal || lastBlueVal != blueVal || lastThreshVal != threshVal || lastReachVal != reachVal || lastRedValB != redValB || lastGreenValB != greenValB || lastBlueValB != blueValB) {
-    print("updating")
     updateBackground(redVal,greenVal,blueVal);
-    image(img, 0, 0)
-    //reloads the original image
-    loadPixels();
-    pixels = lastPixels;
-    updatePixels();
+    //alternateFilter(redVal)
     updateMyImage(redVal,greenVal,blueVal,threshVal,reachVal,redValB,greenValB,blueValB);
+    image(img, 0, 0)
   }
   lastRedVal = redVal;
   lastGreenVal = greenVal;
   lastBlueVal = blueVal;
   lastReachVal = reachVal;
   lastThreshVal = threshVal;
+
+  lastRedValB = redValB
+  lastGreenValB = greenValB
+  lastBlueValB = blueValB
 }
 
 function keyTyped() {
   if (key === 's') {
-    print("saving");
-    img.save('filteredImage', 'jpg');
+    img.save('filtered'+imageName, 'jpg');
   }
 }
