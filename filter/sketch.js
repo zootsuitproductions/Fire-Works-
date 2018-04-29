@@ -1,202 +1,213 @@
-//image of castle from Gico Visione on Instagram: https://www.instagram.com/giocovisione/
-//slider code from p5 library: https://p5js.org/reference/#/p5/createSlider
-//save code from p5 library: https://p5js.org/reference/#/p5.Image/save
+var sprite = [];
+var element;//used for the different elements
+var elemProp;//used for a JSON file with the elements' properties
+var radio;
 
-var img;
-var redSlider;
-var imageArray;
-var originalImage;
-var imageName;
-
-//preload will load before setup runs
 function preload() {
-  imageArray = ["sk8.jpg","legocas.jpg","miniGolf.jpg"]
-  //all images owned by Daniel Santana, or are public domain
-  let randomNumber = Math.round(random(0,imageArray.length-1))
-  img = loadImage(imageArray[randomNumber])
-  originalImage = loadImage(imageArray[randomNumber])
-  imageName = imageArray[randomNumber]
-  //selects a random image from the array
+	elemProp = loadJSON("elementproperties.json");
+};
+
+function setup(){
+	//change "i < #" to another number to change the amount of particles
+	//anything greater than 1000 is usually slow
+	for (var i = 0; i < 1000; i++) { 
+		sprite[i] = new Sprite(); //creates many versions of the sprite
+	}
+
+	// element = new Element();
+
+	radio = createRadio();
+	radio.option("Calcium", 0);
+	radio.option("Cesium", 1);
+	radio.option("Copper", 2);
+	radio.option("Lead", 3);
+	radio.option("Lithium", 4);
+	radio.option("Sodium", 5);
+	radio.style('width', '5px');
+	textAlign(CENTER);
+	radio.position(10, 400);
 }
 
-class SliderClass {
-  constructor(x,y,length,center){
-    this.slider = createSlider(0, length, center);
-    this.slider.position(x,y);
-    this.slider.style('width', '200px');
-  }
+function draw(){
+	createCanvas(windowWidth, windowHeight);
+	background(120, 84, 123);
+
+	displayBurner();
+
+	//displays the selected element
+	val = radio.value();
+	if (val) {
+		element(display);
+	}
+
+	//displays every sprite (used for the flame)
+	for (var i = 0; i < sprite.length; i++) {
+		sprite[i].display();
+		sprite[i].fall();
+	}
+
+	//white background rectangle
+	noStroke();
+	fill(255);
+	rect(0, 0, 75, 20);
+
+	//text showing mouse coordinates
+	fill(255, 0, 0);
+	text("("+mouseX + ", " + mouseY+")", 5, 15);
 }
 
-function updateBackground(r,g,b) {
-  background(r,g,b)
-
-  textSize(25)
-  fill(0,0,0)
-  text("press the s key to save the image",img.width/3+2, img.height+200+2)
-  fill(200,200,200)
-  text("press the s key to save the image",img.width/3, img.height+200)
-
-  textSize(30)
-  fill(0)
-  text("blue",1.2*img.width/8+2, img.height+150+2)
-  text("green",1.2*img.width/8+2, img.height+90+2)
-  text("red",1.2*img.width/8+2, img.height+30+2)
-  text("sensitivity",3.2*img.width/8+2, img.height+60+2)
-  text("averaging reach",3.2*img.width/8+2, img.height+120+2)
-
-  fill(255,0,0)
-  text("red",1.2*img.width/8, img.height+30)
-  fill(0,255,0)
-  text("green",1.2*img.width/8, img.height+90)
-  fill(0,0,255)
-  text("blue",1.2*img.width/8, img.height+150)
-  fill(255);
-  text("sensitivity",3.2*img.width/8, img.height+60)
-  text("averaging reach",3.2*img.width/8, img.height+120)
-
-
-  fill(0)
-  text("background blue",6.2*img.width/8+2, img.height+150+2)
-  text("background green",6.2*img.width/8+2, img.height+90+2)
-  text("background red",6.2*img.width/8+2, img.height+30+2)
-
-  fill(255,0,0)
-  text("background red",6.2*img.width/8, img.height+30)
-  fill(0,255,0)
-  text("background green",6.2*img.width/8, img.height+90)
-  fill(0,0,255)
-  text("background blue",6.2*img.width/8, img.height+150)
-  //makes all of the lables that will acompany the sliders, and the text is multi-layered (with a black shadow) so it does not become invisible at boundry values.
+//will only run if clicked on the burner
+function mousePressed() {
+	if (mouseX > windowWidth/2-40 && mouseX < windowWidth/2+40 && mouseY > windowHeight-300) {
+		for (var i = 0; i < sprite.length; i++) {
+			sprite[i].switch();
+		}
+	}
 }
 
-function setup() {
-  if (img.width > img.height) {
-    img.resize((img.width/img.height)*(windowHeight-220), (windowHeight-220));
-    originalImage.resize((img.width/img.height)*(windowHeight-220), (windowHeight-220));
-  } else {
-    img.resize((img.width/img.height)*1000, 1000);
-    originalImage.resize(1500, (img.height/img.width)*1500);
-  }
-  //resizes images so that they fit on the canvas
-  createCanvas(img.width, img.height+220);
-  background(255,0,0);
-  image(img, 0, 0); //draw the image to the canvas
-  console.log("Image width: " + img.width + " height: " + img.height);
+//constructor function for the different elements/materials
+function Element() {
+	this.x = [windowWidth/6, windowWidth/6];
+	this.y = [windowHeight/2, windowHeight/2];	
 
-  redSlider = new SliderClass(0*img.width/8, img.height,255,random(255));
-  blueSlider = new SliderClass(0*img.width/8, img.height+120,255,random(255));
-  greenSlider = new SliderClass(0*img.width/8, img.height+60,255,random(255));
-  threshSlider = new SliderClass(2*img.width/8, img.height+30,50,5);
-  reachSlider = new SliderClass(2*img.width/8, img.height+90,25,3);
-  //BACKGROUND
-  redSliderB = new SliderClass(5*img.width/8, img.height,255,random(255));
-  blueSliderB = new SliderClass(5*img.width/8, img.height+120,255,random(255));
-  greenSliderB = new SliderClass(5*img.width/8, img.height+60,255,random(255));
-  //creates different objects for the different sliders out of a class, and sets the default of the colors to random values
+	this.display = function() {
+		// fill(elemProp.elements[val].fillColor[0], elemProp.elements[val].fillColor[1], elemProp.elements[val].fillColor[2]);
+		// stroke(elemProp.elements[val].materialColor[1]);
+		fill(0);
+		stroke(255);
+
+		//element can be dragged if mouse is pressed over it
+		if (mouseIsPressed && mouseX > this.x[1]-35 && mouseX < this.x[1]+70 && mouseY > this.y[1]-35 && mouseY < this.y[1]+70) {
+			rect(mouseX-25, mouseY-25, 50, 50);
+			this.x[1] = mouseX-25;
+			this.y[1] = mouseY-25;
+		} else {
+			rect(this.x[0], this.y[0], 50, 50);
+			this.x[1] = this.x[0];
+			this.y[1] = this.y[0];
+		}
+	}
 }
 
-//var lastPixels;
+function Sprite() {
+	this.x = random(windowWidth/2-40, windowWidth/2+35); //sprite's x position
+	this.y = windowHeight - 320; //random(0, windowHeight); //y position
+	this.step = 20; //how fast they move left and right. Not currently being used.
+	this.xVelocity = 0; //used for left/right movement.
+	this.intertia = 1; //how fast the sprite accelerates/decelerates.
+	this.yVelocity = 0; //used for falling.
+	this.gravity = 1; //how quickly yVelocity increases. Higher = stronger gravity, vice versa.
+	this.direction = "none"; //used to denote which way the sprite faces.
+	this.xToss = 10; //max speed sprite can be thrown in either direction.
+	this.yToss = 50; //max height sprite can be thrown.
+	this.bounce = 0.3; //amount of original height sprite bounces to. 0 to 1.
+	this.floor = random(295, 330); //sets how far from bottom is floor
+	this.state = 0; //is flame on (0) or off (1)
 
-function alternateFilter(theThresh) {
-  originalImage.loadPixels();
-  img.loadPixels();
+	//draws the sprite
+	this.display = function() {
+		
+		// stroke(255);
+		// strokeWeight(5);
+		if (this.y < windowHeight-300) {
+			let orng = int(random(1, 500));//used to make random orange flickers
+			let size;
+			if (orng === 1) {//if true, makes sprite orange and bigger
+				fill(255, 120, 0);
+				size = 10;
+			} else {
+				if (this.y < mouseY+25 && mouseY < windowHeight-300 && this.x > mouseX-35
+				&& this.x < mouseX+35 && mouseIsPressed) {
+					//if sprite is above element, changes color to element
+					// fill(elemProp.elements[val].flameColor[0], elemProp.elements[val].flameColor[1], elemProp.elements[val].flameColor[2]);
+					fill(0);
+				} else {
+					fill(50, 100/random(0.5, 1.5), 250/random(0.5, 1.5));
+				}
 
-  for(var i=4*img.width*img.height*0;i<4*img.width*img.height;i+=4) {
-    if (originalImage.pixels[i] < theThresh && originalImage.pixels[i+1] < theThresh && originalImage.pixels[i+2] < theThresh){
-      img.pixels[i] = 0; //red
-      img.pixels[i+1] = 0; //green
-      img.pixels[i+2] = 0;
-    } else {
-      img.pixels[i] = 255; //red
-      img.pixels[i+1] = 255; //green
-      img.pixels[i+2] = 255;
-    }
-  }
-  img.updatePixels()
+				size = 6;
+			}
+
+			noStroke();
+			rect(this.x+random(-10,10), this.y, size, size, 5);
+		}
+	}
+
+	//invokes gravity. As long as the sprite is not on the "ground," it falls faster and faster.
+	this.fall = function() {
+		if (this.state === 1) {
+			if (this.y + this.yVelocity >= windowHeight - this.floor) {
+				this.y = windowHeight - this.floor;
+
+				// makes the particle jump higher the closer it is to the center
+				if (this.x < windowWidth/2) {
+					this.yVelocity = random(10, this.x-windowWidth/2+100);
+				} else {
+					this.yVelocity = random(10, -this.x+windowWidth/2+100);
+				}
+				
+				if (this.yVelocity > 1) {
+					this.yVelocity = -this.yVelocity * this.bounce;
+				} else {
+					this.yVelocity = 0;
+				}
+
+			} else {
+				this.yVelocity++;
+				this.y += this.yVelocity;
+			}
+		} else {
+			if (this.y + this.yVelocity >= windowHeight - 270) {
+				this.y = windowHeight - 270;
+			} else {
+				this.yVelocity++;
+				this.y += this.yVelocity;
+			}
+		}
+	}
+
+	//turns the bunsen burner on and off
+	this.switch = function() {
+		if (this.state === 1) {
+			this.state = 0;
+		} else {
+			this.state = 1;
+		}
+	}
 }
 
-function updateMyImage(r,g,b,th,rea,br,bg,bb) {
-  originalImage.loadPixels();
-  img.loadPixels();
-  //lastPixels = originalImage.pixels
-  //runs through sets of values for r,g,b, and alpha
-  for(var i=4*img.width*img.height*0;i<4*img.width*img.height;i+=4) {
-    let color = [r,g,b]
-    let threshhold = th
-    let theReach = rea
-    //defines these variables as the inputs of the function
-    //the following if statements check if the originalImage.pixels adjacent to a given pixel are contrasting enough by a certain threshold (in other words, it detects a change in shade, or a detail, and draws a line there)
-    if (originalImage.pixels[i]+threshhold < originalImage.pixels[i+4] && originalImage.pixels[i+1]+threshhold < originalImage.pixels[i+5] && originalImage.pixels[i+2]+threshhold < originalImage.pixels[i+6]) {
-      img.pixels[i] = color[0]; //red
-      img.pixels[i+1] = color[1]; //green
-      img.pixels[i+2] = color[2]; //blue
-    } else if (originalImage.pixels[i] > originalImage.pixels[i+4]+threshhold && originalImage.pixels[i+1] > originalImage.pixels[i+5]+threshhold && originalImage.pixels[i+2] > originalImage.pixels[i+6]+threshhold) {
-      img.pixels[i] = color[0]; //red
-      img.pixels[i+1] = color[1]; //green
-      img.pixels[i+2] = color[2]; //blue
-    } else if (originalImage.pixels[i]+threshhold < getAveragePixelValuebelow(i,theReach) && originalImage.pixels[i+1]+threshhold < getAveragePixelValuebelow(i+1,theReach) && originalImage.pixels[i+2]+threshhold < getAveragePixelValuebelow(i+2,theReach)) {
-      img.pixels[i] = color[0]; //red
-      img.pixels[i+1] = color[1]; //green
-      img.pixels[i+2] = color[2]; //blue
-    } else {
-      img.pixels[i] = br; //red
-      img.pixels[i+1] = bg; //green
-      img.pixels[i+2] = bb; //blue
-    }
-    img.pixels[i+3] -= 0; //alpha
-  }
-  img.updatePixels();
-}
+function displayBurner() {
+	stroke(130);
+	strokeWeight(5);
+	fill(150);
+	//body of burner
+	rect(windowWidth/2-30, windowHeight-250, 60, 300);
 
-//the following method averages the color values of originalImage.pixels below a given pixel in order to change where and when lines are drawn in the filter
-function getAveragePixelValuebelow(pixelIndex,reachBelow) {
-  let toBeDivided = 0
-  for (var r = 1; r <= reachBelow; r ++) {
-    toBeDivided+=originalImage.pixels[pixelIndex+img.width*4*r]
-  }
-  return toBeDivided/reachBelow
-}
+	//base of burner
+	rect(windowWidth/2-100, windowHeight-20, 200, 20);
+	bezier(windowWidth/2-70, windowHeight-20, windowWidth/2-40, windowHeight-40, windowWidth/2+40, windowHeight-40, windowWidth/2+70, windowHeight-20);
 
-var lastRedVal;
-var lastGreenVal;
-var lastBlueVal;
-var lastReachVal;
-var lastThreshVal;
+	//on/off knob
+	stroke(100);
+	fill(120);
+	ellipse(windowWidth/2, windowHeight-150, 60);
+	if (sprite[0].state === 1) {
+		rect(windowWidth/2-10, windowHeight-180, 20, 59, 10);
+	} else {
+		rect(windowWidth/2-30, windowHeight-160, 60, 20, 10);
+	}
 
-var lastRedValB;
-var lastGreenValB;
-var lastBlueValB;
-
-function draw() {
-  var redVal = redSlider.slider.value();
-  var greenVal = greenSlider.slider.value();
-  var blueVal = blueSlider.slider.value();
-  var threshVal = threshSlider.slider.value();
-  var reachVal = reachSlider.slider.value();
-
-  var redValB = redSliderB.slider.value();
-  var greenValB = greenSliderB.slider.value();
-  var blueValB = blueSliderB.slider.value();
-
-  if (lastRedVal != redVal || lastGreenVal != greenVal || lastBlueVal != blueVal || lastThreshVal != threshVal || lastReachVal != reachVal || lastRedValB != redValB || lastGreenValB != greenValB || lastBlueValB != blueValB) {
-    updateBackground(redVal,greenVal,blueVal);
-    //alternateFilter(redVal)
-    updateMyImage(redVal,greenVal,blueVal,threshVal,reachVal,redValB,greenValB,blueValB);
-    image(img, 0, 0)
-  }
-  lastRedVal = redVal;
-  lastGreenVal = greenVal;
-  lastBlueVal = blueVal;
-  lastReachVal = reachVal;
-  lastThreshVal = threshVal;
-
-  lastRedValB = redValB
-  lastGreenValB = greenValB
-  lastBlueValB = blueValB
-}
-
-function keyTyped() {
-  if (key === 's') {
-    img.save('filtered'+imageName, 'jpg');
-  }
+	//tip of burner
+	stroke(130, 134, 30);
+	fill(150, 154, 40);
+	beginShape();
+	vertex(windowWidth/2-40, windowHeight-290);
+	vertex(windowWidth/2+40, windowHeight-290);
+	vertex(windowWidth/2+40, windowHeight-250);
+	vertex(windowWidth/2+35, windowHeight-250);
+	vertex(windowWidth/2+35, windowHeight-240);
+	vertex(windowWidth/2-35, windowHeight-240);
+	vertex(windowWidth/2-35, windowHeight-250);
+	vertex(windowWidth/2-40, windowHeight-250);
+	endShape(CLOSE);
 }
