@@ -23,8 +23,8 @@ function setup(){
 	radio.option("Lead", 3);
 	radio.option("Lithium", 4);
 	radio.option("Sodium", 5);
-	radio.style('width', '5px');
-	textAlign(CENTER);
+	radio.style('width', '0px');
+	textAlign(BOTTOM);
 	radio.position(10, 400);
 }
 
@@ -65,10 +65,6 @@ function mousePressed() {
 	}
 }
 
-function mouseWheel(event) {
-	return false;
-}
-
 //constructor function for the different elements/materials
 function Element() {
 	this.x = [windowWidth/6, windowWidth/6];
@@ -76,12 +72,12 @@ function Element() {
 
 	this.display = function() {
 		fill(elemProp.elements[val].fillColor[0], elemProp.elements[val].fillColor[1], elemProp.elements[val].fillColor[2]);
-		// stroke(elemProp.elements[val].materialColor[1]);
+		stroke(elemProp.elements[val].strokeColor[0], elemProp.elements[val].strokeColor[1], elemProp.elements[val].strokeColor[2]);
 		// fill(0);
-		stroke(255);
+		// stroke(255);
 
 		//element can be dragged if mouse is pressed over it
-		if (mouseIsPressed && mouseX > this.x[1]-35 && mouseX < this.x[1]+70 && mouseY > this.y[1]-35 && mouseY < this.y[1]+70) {
+		if (mouseIsPressed && mouseX > this.x[1]-70 && mouseX < this.x[1]+140 && mouseY > this.y[1]-70 && mouseY < this.y[1]+140) {
 			rect(mouseX-25, mouseY-25, 50, 50);
 			this.x[1] = mouseX-25;
 			this.y[1] = mouseY-25;
@@ -101,18 +97,12 @@ function Sprite() {
 	this.intertia = 1; //how fast the sprite accelerates/decelerates.
 	this.yVelocity = 0; //used for falling.
 	this.gravity = 1; //how quickly yVelocity increases. Higher = stronger gravity, vice versa.
-	this.direction = "none"; //used to denote which way the sprite faces.
-	this.xToss = 10; //max speed sprite can be thrown in either direction.
-	this.yToss = 50; //max height sprite can be thrown.
 	this.bounce = 0.3; //amount of original height sprite bounces to. 0 to 1.
 	this.floor = random(295, 330); //sets how far from bottom is floor
 	this.state = 0; //is flame on (0) or off (1)
 
 	//draws the sprite
 	this.display = function() {
-		
-		// stroke(255);
-		// strokeWeight(5);
 		if (this.y < windowHeight-300) {
 			let orng = int(random(1, 500));//used to make random orange flickers
 			let size;
@@ -120,11 +110,9 @@ function Sprite() {
 				fill(255, 120, 0);
 				size = 10;
 			} else {
-				if (this.y < mouseY+25 && mouseY < windowHeight-275 && this.x > mouseX-35
-				&& this.x < mouseX+35 && mouseIsPressed) {
+				if (this.y < mouseY+random(20, 50) && mouseY < windowHeight-270 && this.x > mouseX-35 && this.x < mouseX+35 && mouseIsPressed && val) {
 					//if sprite is above element, changes color to element
 					fill(elemProp.elements[val].flameColor[0], elemProp.elements[val].flameColor[1], elemProp.elements[val].flameColor[2]);
-					// fill(elemProp.elements[0].fillColor[0]);
 				} else {
 					fill(50, 100/random(0.5, 1.5), 250/random(0.5, 1.5));
 				}

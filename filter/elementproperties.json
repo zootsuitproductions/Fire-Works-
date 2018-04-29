@@ -4,26 +4,36 @@
 			"element": "calcium",
 			"flameColor": [
 				255,
-				100,
-				0
+				190,
+				50
 			],
 			"fillColor": [
-				255,
-				100,
-				0
+				180,
+				180,
+				180
+			],
+			"strokeColor": [
+				160,
+				160,
+				160
 			]
 		},
 		{
 			"element": "cesium",
 			"flameColor": [
-				255,
-				0,
-				0
+				200,
+				150,
+				255
 			],
 			"fillColor": [
+				250,
+				220,
+				25
+			],
+			"strokeColor": [
 				255,
-				0,
-				0
+				240,
+				125
 			]
 		},
 		{
@@ -31,51 +41,71 @@
 			"flameColor": [
 				0,
 				255,
-				0
+				128
 			],
 			"fillColor": [
-				0,
-				255,
-				0
+				193,
+				99,
+				44
+			],
+			"strokeColor": [
+				208,
+				101,
+				39
 			]
 		},
 		{
 			"element": "lead",
 			"flameColor": [
-				0,
-				0,
+				204,
+				204,
 				255
 			],
 			"fillColor": [
-				0,
-				0,
-				255
+				96,
+				96,
+				96
+			],
+			"strokeColor": [
+				128,
+				128,
+				128
 			]
 		},
 		{
 			"element": "lithium",
 			"flameColor": [
-				255,
-				255,
-				0
+				246,
+				60,
+				60
 			],
 			"fillColor": [
-				255,
-				255,
-				0
+				224,
+				224,
+				224
+			],
+			"strokeColor": [
+				235,
+				235,
+				235
 			]
 		},
 		{
 			"element": "sodium",
 			"flameColor": [
 				255,
-				255,
-				255
+				247,
+				118
 			],
 			"fillColor": [
-				255,
-				255,
-				255
+				200,
+				200,
+				200
+			],
+			"strokeColor": [
+				230,
+				230,
+				230
 			]
 		}
 	]
