@@ -65,9 +65,9 @@ function mousePressed() {
 	}
 }
 
-function mouseWheel(event) {
+/*function mouseWheel(event) {
 	return false;
-}
+}*/
 
 //constructor function for the different elements/materials
 function Element() {
