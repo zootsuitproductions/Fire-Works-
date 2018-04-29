@@ -45,15 +45,6 @@ function draw(){
 		sprite[i].display();
 		sprite[i].fall();
 	}
-
-	//white background rectangle
-	noStroke();
-	fill(255);
-	rect(0, 0, 75, 20);
-
-	//text showing mouse coordinates
-	fill(255, 0, 0);
-	text("("+mouseX + ", " + mouseY+")", 5, 15);
 }
 
 //will only run if clicked on the burner
@@ -68,7 +59,7 @@ function mousePressed() {
 //constructor function for the different elements/materials
 function Element() {
 	this.x = [windowWidth/6, windowWidth/6];
-	this.y = [windowHeight/2, windowHeight/2];	
+	this.y = [windowHeight-350, windowHeight-350];	
 
 	this.display = function() {
 		fill(elemProp.elements[val].fillColor[0], elemProp.elements[val].fillColor[1], elemProp.elements[val].fillColor[2]);
@@ -82,9 +73,9 @@ function Element() {
 			this.x[1] = mouseX-25;
 			this.y[1] = mouseY-25;
 		} else {
-			rect(this.x[0], this.y[0], 50, 50);
-			this.x[1] = this.x[0];
-			this.y[1] = this.y[0];
+			rect(this.x[1], this.y[1], 50, 50);
+			// this.x[1] = this.x[0];
+			// this.y[1] = this.y[0];
 		}
 	}
 }
@@ -110,7 +101,7 @@ function Sprite() {
 				fill(255, 120, 0);
 				size = 10;
 			} else {
-				if (this.y < mouseY+random(20, 50) && mouseY < windowHeight-270 && this.x > mouseX-35 && this.x < mouseX+35 && mouseIsPressed && val) {
+				if (this.y < element.y[1]+random(50, 70) && element.y[1] < windowHeight-295 && this.x > element.x[1]-10 && this.x < element.x[1]+60 && val) {
 					//if sprite is above element, changes color to element
 					fill(elemProp.elements[val].flameColor[0], elemProp.elements[val].flameColor[1], elemProp.elements[val].flameColor[2]);
 				} else {
