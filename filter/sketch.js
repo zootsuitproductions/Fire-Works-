@@ -163,7 +163,7 @@ function displayBurner() {
 	fill(255);
 	text("Click on the burner", windowWidth/2+50, windowHeight-200);
 	text("to turn it on", windowWidth/2+50, windowHeight-170);
-	text("Select and element", 10, 50);
+	text("Select an element", 10, 50);
 	text("and drag it to the", 10, 80);
 	text("fire", 10, 110);
 
