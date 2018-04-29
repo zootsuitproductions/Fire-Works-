@@ -65,8 +65,6 @@ function Element() {
 	this.display = function() {
 		fill(elemProp.elements[val].fillColor[0], elemProp.elements[val].fillColor[1], elemProp.elements[val].fillColor[2]);
 		stroke(elemProp.elements[val].strokeColor[0], elemProp.elements[val].strokeColor[1], elemProp.elements[val].strokeColor[2]);
-		// fill(0);
-		// stroke(255);
 
 		//element can be dragged if mouse is pressed over it
 		if (mouseIsPressed && mouseX > this.x[1]-70 && mouseX < this.x[1]+140 && mouseY > this.y[1]-70 && mouseY < this.y[1]+140) {
@@ -75,8 +73,6 @@ function Element() {
 			this.y[1] = mouseY-25;
 		} else {
 			rect(this.x[1], this.y[1], 50, 50);
-			// this.x[1] = this.x[0];
-			// this.y[1] = this.y[0];
 		}
 	}
 }
