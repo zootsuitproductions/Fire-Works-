@@ -17,14 +17,15 @@ function setup(){
 	element = new Element();
 
 	radio = createRadio();
-	radio.option("Calcium", 0);
-	radio.option("Cesium", 1);
-	radio.option("Copper", 2);
-	radio.option("Lead", 3);
-	radio.option("Lithium", 4);
-	radio.option("Sodium", 5);
+	radio.option('Calcium', 0);
+	radio.option('Cesium', 1);
+	radio.option('Copper', 2);
+	radio.option('Lead', 3);
+	radio.option('Lithium', 4);
+	radio.option('Sodium', 5);
 	radio.style('width', '0px');
-	radio.style('font-size', '50px');
+	radio.style('font-size', '40px');
+	radio.style('font-family', 'arial')
 	textAlign(BOTTOM);
 	radio.position(10, 100);
 }
@@ -157,6 +158,15 @@ function Sprite() {
 }
 
 function displayBurner() {
+	//intruction
+	textSize(30);
+	fill(255);
+	text("Click on the burner", windowWidth/2+50, windowHeight-200);
+	text("to turn it on", windowWidth/2+50, windowHeight-170);
+	text("Select and element", 10, 50);
+	text("and drag it to the", 10, 80);
+	text("fire", 10, 110);
+
 	stroke(130);
 	strokeWeight(5);
 	fill(150);
