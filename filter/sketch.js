@@ -1,196 +1,201 @@
-var sprite = [];
-var element;//used for the different elements
-var elemProp;//used for a JSON file with the elements' properties
-var radio;
+/*
+	"ISP Speed Index." Netflix, ispspeedindex.netflix.com/country/us/. Accessed 15
+    	Dec. 2017.
+
+    "Net Neutrality: What You Need to Know Now." Save the Internet, Free Press,
+    	2017, www.savetheinternet.com/net-neutrality-what-you-need-know-now.
+    	Accessed 15 Dec. 2017. 
+*/
+
+var radio;//used to make the radios
+var mbps;//used to load the JSON file
+var val;//for utilizing the radio value
+var sprite = [];//blocks
+var buttonEnd;
+var buttonBegin;
 
 function preload() {
-	elemProp = loadJSON("elementproperties.json");
+	mbps = loadJSON("netspeeds.json");
 };
 
-function setup(){
-	//change "i < #" to another number to change the amount of particles
-	//anything greater than 1000 is usually slow
-	for (var i = 0; i < 1000; i++) { 
-		sprite[i] = new Sprite(); //creates many versions of the sprite
-	}
-
-	element = new Element();
-
+function setup() {
 	radio = createRadio();
-	radio.option("Calcium", 0);
-	radio.option("Cesium", 1);
-	radio.option("Copper", 2);
-	radio.option("Lead", 3);
-	radio.option("Lithium", 4);
-	radio.option("Sodium", 5);
-	radio.style('width', '0px');
-	textAlign(BOTTOM);
+	radio.option("September 2013", 0);
+	radio.option("October 2013  ", 1);
+	radio.option("November 2013 ", 2);
+	radio.option("December 2013 ", 3);
+	radio.option("January 2014  ", 4);
+	radio.option("February 2014 ", 5);
+	radio.option("March 2 0 1 4 ", 6);
+	radio.option("April 2014    ", 7);
 	radio.position(10, 400);
-}
+	radio.style("width", "140px");
+	radio.style("font-family", "arial");
+	textAlign(CENTER);
 
-function draw(){
+	for (var i = 0; i < 277; i++) {
+		sprite[i] = new Sprite();
+	};
+
+	myLink = createA('https://www.savetheinternet.com/net-neutrality-what-you-need-know-now', 'If you don\'t know what');
+	myLink.position(15, 565);
+	myLink1 = createA('https://www.savetheinternet.com/net-neutrality-what-you-need-know-now', 'Net Neutrality is');
+	myLink1.position(15, 580);
+};
+
+//alert("Works best in Firefox");
+
+function draw() {
 	createCanvas(windowWidth, windowHeight);
-	background(120, 84, 123);
+	background(100, 200, 255);
 
-	displayBurner();
+	noStroke();
+	fill(204, 229, 255);
+	rect(0, windowHeight - 20, windowWidth, 23);//floor. Purely asthetic; the sprites don't collide directly.
 
-	//displays the selected element
+	//banner on top
+	fill(70);
+	rect(0, 0, windowWidth, 200);
+	textAlign(CENTER);
+	fill(255);
+	textSize(100);
+	text("https://netneutrality", windowWidth/2, 150);
+
 	val = radio.value();
-	if (val) {
-		element.display();
-	}
 
-	//displays every sprite (used for the flame)
+	//creates every block and gives them gravity
 	for (var i = 0; i < sprite.length; i++) {
-		sprite[i].display();
 		sprite[i].fall();
-	}
-}
+		sprite[i].display();
+	};
 
-//will only run if clicked on the burner
-function mousePressed() {
-	if (mouseX > windowWidth/2-40 && mouseX < windowWidth/2+40 && mouseY > windowHeight-300) {
-		for (var i = 0; i < sprite.length; i++) {
-			sprite[i].switch();
-		}
-	}
-}
+	if (val) {
+		//once a radio has been selected, the appropriate blocks are made to fall up or down
+		for (var i = 0; i < parseFloat(mbps.netflix[val].speed.toFixed(2)); i++) {
+			sprite[i].floor = "up";
+		};
+		for (var i = parseFloat(mbps.netflix[val].speed.toFixed(2)); i < sprite.length; i++) {
+			sprite[i].floor = "down";
+		};
+		//text telling the month and speed
+		textAlign(LEFT);
+		textSize(60);
+		fill(204, 229, 255);
+		noStroke();
+		text(`Netflix's speed was ${mbps.netflix[val].speed/100} mbps`, 200, 400);
+		text(`in ${mbps.netflix[val].date}.`, 200, 460);
 
-//constructor function for the different elements/materials
-function Element() {
-	this.x = [windowWidth/6, windowWidth/6];
-	this.y = [windowHeight-350, windowHeight-350];	
+		if (val === 5) {
+			fill(204, 229, 255);
+			textSize(80);
+			text("This month Netflix agreed to Comcast's deal", 200, 520);
+		};
 
-	this.display = function() {
-		fill(elemProp.elements[val].fillColor[0], elemProp.elements[val].fillColor[1], elemProp.elements[val].fillColor[2]);
-		stroke(elemProp.elements[val].strokeColor[0], elemProp.elements[val].strokeColor[1], elemProp.elements[val].strokeColor[2]);
-		// fill(0);
-		// stroke(255);
+		textSize(30);
+		text("Each block represents 10 kilobytes.", 200, 500);
+		text("Press any key to toss the blocks.", 200, windowHeight - 100);
 
-		//element can be dragged if mouse is pressed over it
-		if (mouseIsPressed && mouseX > this.x[1]-70 && mouseX < this.x[1]+140 && mouseY > this.y[1]-70 && mouseY < this.y[1]+140) {
-			rect(mouseX-25, mouseY-25, 50, 50);
-			this.x[1] = mouseX-25;
-			this.y[1] = mouseY-25;
-		} else {
-			rect(this.x[1], this.y[1], 50, 50);
-			// this.x[1] = this.x[0];
-			// this.y[1] = this.y[0];
-		}
-	}
-}
+		fill(200);
+		text("\u{2B07} Speed that month \u{2B07}", 10, 190);// '\u{2B07}' makes a down arrow with unicode
+	} else {//Introductory information for before a radio has been selected
+		textSize(30);
+		fill(204, 229, 255);
+		noStroke();
+		textAlign(LEFT);
+		text("In October 2013, Netflix's speed on Comcast began slowing. Comcast was throttling its", 200, 300);
+		text("consumers' access to Netflix to coerce the company into a network deal. In February", 200, 330);
+		text("2014, Netflix agreed to the deal, and its speed on Comcast skyrocketed, even exceeding",200, 360);
+		text("its original speed in September. It peaked in April 2014 at 2.77 mbps.", 200, 390);
+
+		text("Press any key to toss the blocks. Select a month at left.", 200, 450);
+		text("The green blocks represent that month's speed.", 200,480);
+	};
+};
+
+//throws the blocks, mainly just for fun
+function keyPressed() {
+	for (var i = 0; i < sprite.length; i++) {
+		sprite[i].tossed();
+	};
+};
 
 function Sprite() {
-	this.x = random(windowWidth/2-40, windowWidth/2+35); //sprite's x position
-	this.y = windowHeight - 320; //random(0, windowHeight); //y position
-	this.step = 20; //how fast they move left and right. Not currently being used.
-	this.xVelocity = 0; //used for left/right movement.
-	this.intertia = 1; //how fast the sprite accelerates/decelerates.
+	this.x = random(0, windowWidth-38); //sprite's x position
+	this.y = random(5, 160); //y position
 	this.yVelocity = 0; //used for falling.
-	this.gravity = 1; //how quickly yVelocity increases. Higher = stronger gravity, vice versa.
-	this.bounce = 0.3; //amount of original height sprite bounces to. 0 to 1.
-	this.floor = random(295, 330); //sets how far from bottom is floor
-	this.state = 0; //is flame on (0) or off (1)
+	this.gravity = random(0.65, 0.85);//Higher gravity = greater acceleration. Every block has a different
+	//gravity so that they don't fall in a line but they separate a bit
+
+	this.yToss = 20; //max height sprite can be thrown.
+	this.bounce = random(0.3, 0.5);//each block has a slightly different bounce factor
+	this.floor = "down";//"up" tells the blocks to fall up, vice versa with "down"
+
+	//variables to easily change the height of the "ground"
+	this.up = random(224, 320);
+	this.down = 43;//random(63, 95);
 
 	//draws the sprite
 	this.display = function() {
-		if (this.y < windowHeight-300) {
-			let orng = int(random(1, 500));//used to make random orange flickers
-			let size;
-			if (orng === 1) {//if true, makes sprite orange and bigger
-				fill(255, 120, 0);
-				size = 10;
-			} else {
-				if (this.y < element.y[1]+random(50, 70) && element.y[1] < windowHeight-295 && this.x > element.x[1]-10 && this.x < element.x[1]+60 && val) {
-					//if sprite is above element, changes color to element
-					fill(elemProp.elements[val].flameColor[0], elemProp.elements[val].flameColor[1], elemProp.elements[val].flameColor[2]);
-				} else {
-					fill(50, 100/random(0.5, 1.5), 250/random(0.5, 1.5));
-				}
-
-				size = 6;
-			}
-
-			noStroke();
-			rect(this.x+random(-10,10), this.y, size, size, 5);
-		}
-	}
+		stroke(255);
+		strokeWeight(5);
+		//changes the color and direction of the triangles based on where they fall
+		if (this.floor === "down") {
+			fill(255, 0, 150, 50);
+			triangle(this.x-22, this.y-20, this.x, this.y+20, this.x+22, this.y-20);
+		} else {
+			fill(150, 255, 0, 50);
+			triangle(this.x-22, this.y+20, this.x, this.y-20, this.x+22, this.y+20);
+		};
+		//rect(this.x, this.y, 30, 40);
+	};
 
 	//invokes gravity. As long as the sprite is not on the "ground," it falls faster and faster.
 	this.fall = function() {
-		if (this.state === 1) {
-			if (this.y + this.yVelocity >= windowHeight - this.floor) {
-				this.y = windowHeight - this.floor;
-
-				// makes the particle jump higher the closer it is to the center
-				if (this.x < windowWidth/2) {
-					this.yVelocity = random(10, this.x-windowWidth/2+100);
-				} else {
-					this.yVelocity = random(10, -this.x+windowWidth/2+100);
-				}
-				
+		if (this.floor === "down") {
+			if (this.y + this.yVelocity >= windowHeight - this.down) {
+				this.y = windowHeight - this.down;
 				if (this.yVelocity > 1) {
 					this.yVelocity = -this.yVelocity * this.bounce;
 				} else {
 					this.yVelocity = 0;
-				}
-
+				};
 			} else {
-				this.yVelocity++;
+				this.yVelocity += this.gravity;
 				this.y += this.yVelocity;
-			}
-		} else {
-			if (this.y + this.yVelocity >= windowHeight - 270) {
-				this.y = windowHeight - 270;
+			};
+		} else if (this.floor === "up") {
+			if (this.y + this.yVelocity <= this.up) {
+				this.y = this.up;
+				if (this.yVelocity < 1) {
+					this.yVelocity = -this.yVelocity * this.bounce;
+				} else {
+					this.yVelocity = 0;
+				};
 			} else {
-				this.yVelocity++;
+				this.yVelocity -= this.gravity;
 				this.y += this.yVelocity;
-			}
-		}
-	}
+			};
+		};
+	};
 
-	//turns the bunsen burner on and off
-	this.switch = function() {
-		if (this.state === 1) {
-			this.state = 0;
-		} else {
-			this.state = 1;
-		}
-	}
-}
+	//for when the sprite can be moved left/right.
+	//if it goes too far in one direction it appears on the other side of the screen.
+	this.touchingEdge = function() {
+		if (this.x < -70) {
+			this.x = windowWidth;
+		};
 
-function displayBurner() {
-	stroke(130);
-	strokeWeight(5);
-	fill(150);
-	//body of burner
-	rect(windowWidth/2-30, windowHeight-250, 60, 300);
+		if (this.x > windowWidth) {
+			this.x = -70;
+		};
+	};
 
-	//base of burner
-	rect(windowWidth/2-100, windowHeight-20, 200, 20);
-	bezier(windowWidth/2-70, windowHeight-20, windowWidth/2-40, windowHeight-40, windowWidth/2+40, windowHeight-40, windowWidth/2+70, windowHeight-20);
-
-	//on/off knob
-	stroke(100);
-	fill(120);
-	ellipse(windowWidth/2, windowHeight-150, 60);
-	if (sprite[0].state === 1) {
-		rect(windowWidth/2-10, windowHeight-180, 20, 59, 10);
-	} else {
-		rect(windowWidth/2-30, windowHeight-160, 60, 20, 10);
-	}
-
-	//tip of burner
-	stroke(130, 134, 30);
-	fill(150, 154, 40);
-	beginShape();
-	vertex(windowWidth/2-40, windowHeight-290);
-	vertex(windowWidth/2+40, windowHeight-290);
-	vertex(windowWidth/2+40, windowHeight-250);
-	vertex(windowWidth/2+35, windowHeight-250);
-	vertex(windowWidth/2+35, windowHeight-240);
-	vertex(windowWidth/2-35, windowHeight-240);
-	vertex(windowWidth/2-35, windowHeight-250);
-	vertex(windowWidth/2-40, windowHeight-250);
-	endShape(CLOSE);
-}
+	//gives every sprite a random x and y velocity to throw them around.
+	this.tossed = function() {
+		if (this.floor === "down") {
+			this.yVelocity = random(-12, -this.yToss);
+		} else if(this.floor === "up") {
+			this.yVelocity = random(12, this.yToss);
+		};
+	};
+};
