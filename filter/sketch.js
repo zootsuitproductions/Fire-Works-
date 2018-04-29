@@ -14,7 +14,7 @@ function setup(){
 		sprite[i] = new Sprite(); //creates many versions of the sprite
 	}
 
-	// element = new Element();
+	element = new Element();
 
 	radio = createRadio();
 	radio.option("Calcium", 0);
@@ -37,7 +37,7 @@ function draw(){
 	//displays the selected element
 	val = radio.value();
 	if (val) {
-		element(display);
+		element.display();
 	}
 
 	//displays every sprite (used for the flame)
@@ -71,9 +71,9 @@ function Element() {
 	this.y = [windowHeight/2, windowHeight/2];	
 
 	this.display = function() {
-		// fill(elemProp.elements[val].fillColor[0], elemProp.elements[val].fillColor[1], elemProp.elements[val].fillColor[2]);
+		fill(elemProp.elements[val].fillColor[0], elemProp.elements[val].fillColor[1], elemProp.elements[val].fillColor[2]);
 		// stroke(elemProp.elements[val].materialColor[1]);
-		fill(0);
+		// fill(0);
 		stroke(255);
 
 		//element can be dragged if mouse is pressed over it
@@ -116,11 +116,11 @@ function Sprite() {
 				fill(255, 120, 0);
 				size = 10;
 			} else {
-				if (this.y < mouseY+25 && mouseY < windowHeight-300 && this.x > mouseX-35
+				if (this.y < mouseY+25 && mouseY < windowHeight-275 && this.x > mouseX-35
 				&& this.x < mouseX+35 && mouseIsPressed) {
 					//if sprite is above element, changes color to element
-					// fill(elemProp.elements[val].flameColor[0], elemProp.elements[val].flameColor[1], elemProp.elements[val].flameColor[2]);
-					fill(0);
+					fill(elemProp.elements[val].flameColor[0], elemProp.elements[val].flameColor[1], elemProp.elements[val].flameColor[2]);
+					// fill(elemProp.elements[0].fillColor[0]);
 				} else {
 					fill(50, 100/random(0.5, 1.5), 250/random(0.5, 1.5));
 				}

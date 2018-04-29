@@ -3,13 +3,13 @@
 		{
 			"element": "calcium",
 			"flameColor": [
-				0,
-				0,
+				255,
+				100,
 				0
 			],
 			"fillColor": [
-				0,
-				0,
+				255,
+				100,
 				0
 			]
 		},
