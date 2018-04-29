@@ -65,6 +65,10 @@ function mousePressed() {
 	}
 }
 
+function mouseWheel(event) {
+	return false;
+}
+
 //constructor function for the different elements/materials
 function Element() {
 	this.x = [windowWidth/6, windowWidth/6];
