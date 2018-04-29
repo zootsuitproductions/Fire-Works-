@@ -1,0 +1,82 @@
+{
+	"elements": [
+		{
+			"element": "calcium",
+			"flameColor": [
+				0,
+				0,
+				0
+			],
+			"fillColor": [
+				0,
+				0,
+				0
+			]
+		},
+		{
+			"element": "cesium",
+			"flameColor": [
+				255,
+				0,
+				0
+			],
+			"fillColor": [
+				255,
+				0,
+				0
+			]
+		},
+		{
+			"element": "copper",
+			"flameColor": [
+				0,
+				255,
+				0
+			],
+			"fillColor": [
+				0,
+				255,
+				0
+			]
+		},
+		{
+			"element": "lead",
+			"flameColor": [
+				0,
+				0,
+				255
+			],
+			"fillColor": [
+				0,
+				0,
+				255
+			]
+		},
+		{
+			"element": "lithium",
+			"flameColor": [
+				255,
+				255,
+				0
+			],
+			"fillColor": [
+				255,
+				255,
+				0
+			]
+		},
+		{
+			"element": "sodium",
+			"flameColor": [
+				255,
+				255,
+				255
+			],
+			"fillColor": [
+				255,
+				255,
+				255
+			]
+		}
+	]
+}
